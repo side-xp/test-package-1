@@ -37,7 +37,7 @@ jobs:
             -x ".vscode/*" \
             -x ".vsconfig"
 
-      - name: Pack to tarball:
+      - name: Pack to tarball
         run: |
           tar --exclude='./docs' \
               --exclude='./github' \
