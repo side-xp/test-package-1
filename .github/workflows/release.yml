@@ -31,28 +31,41 @@ jobs:
           echo "package_name=$NAME" >> $GITHUB_OUTPUT
           echo "package_title=$CLEAN_DISPLAY_NAME" >> $GITHUB_OUTPUT
 
-      # Creates a release/ folder that will contain only the "useful" files (exclude .github/, .vscode/, etc.)
-      - name: Prepare Release folder
+      # Create a release/package folder that will contain only the "useful" files (exclude .github/, .vscode/, etc.)
+      - name: Prepare package folder
         run: |
-          mkdir -p release/tmp
-          rsync -a ./ release/tmp/ \
+          mkdir -p release/package
+          rsync -a ./ release/package/ \
             --exclude ".git*" \
             --exclude ".github" \
             --exclude ".vscode" \
-            --exclude ".vsconfig"
+            --exclude ".vsconfig" \
             --exclude "mkdocs.yml"
 
-      # Create a ZIP archive with the content of the release/tmp folder
-      - name: Pack to ZIP archive
+      # Create a release/docs folder that will contain the content of the Documentation~/ folder
+      - name: Prepare docs folder
         run: |
-          cd release/tmp
+          mkdir -p release/docs
+          cp -a "Documentation~" "release/docs"
+
+      # Create a ZIP archive with the content of the release/package folder
+      - name: Output package as ZIP archive
+        run: |
+          cd release/package
           zip -r ../${{ steps.pkg.outputs.package_name }}.zip ./*
           cd ../..
 
-      # Create a Tarball archive with the content of the release/tmp folder
-      - name: Pack to tarball
+      # Create a Tarball archive with the content of the release/package folder
+      - name: Output package as tarball
         run: |
-          tar -czf release/${{ steps.pkg.outputs.package_name }}.tar.gz -C release/tmp .
+          tar -czf release/${{ steps.pkg.outputs.package_name }}.tar.gz -C release/package .
+
+      # Create a ZIP archive with the content of the release/docs folder
+      - name: Output docs as ZIP archive
+        run: |
+          cd release/docs
+          zip -r ../Documentation.zip ./*
+          cd ../..
 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
