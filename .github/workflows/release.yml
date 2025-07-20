@@ -2,8 +2,6 @@ name: Create package's release on main push
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*.*.*'
 
