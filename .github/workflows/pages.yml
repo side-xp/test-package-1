@@ -1,0 +1,34 @@
+name: Deploy documentation
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Make the content of the repository accessible from a $GITHUB_WORKSPACE variable
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Make the docs/ folder exist only during this workflow to let GitHub automate the deployment
+      - name: Copy Documentation~/ to docs/
+        run: |
+          rm -rf docs
+          cp -r "Documentation~" "docs"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages content
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

@@ -13,46 +13,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Makes the content of the repository accessible from a $GITHUB_WORKSPACE variable
+      # Make the content of the repository accessible from a $GITHUB_WORKSPACE variable
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Read the name of the package from the package.json file, so the release will be named the same
-      - name: Read package name from package.json
+      # Read the content of the package.json file:
+      # - Extract the "name" property, which will also be used for archive files name
+      # - Extract the "displayName" property if it exists
+      # - Remove the "SideXP - " or "com.side-xp" prefix, to get the "clean" name, used for the name of the release
+      - name: Read package.json
         id: pkg
         run: |
-          NAME=$(jq -r .name package.json)
+          PKG_PATH="package.json"
+          NAME=$(jq -r .name "$PKG_PATH")
+          DISPLAY_NAME=$(jq -r '.displayName // .name' "$PKG_PATH")
+          CLEAN_DISPLAY_NAME=$(echo "$DISPLAY_NAME" | sed -E 's/^Side XP - //; s/^com\.side-xp\.//')
           echo "package_name=$NAME" >> $GITHUB_OUTPUT
+          echo "package_title=$CLEAN_DISPLAY_NAME" >> $GITHUB_OUTPUT
 
-      # Creates a release/ folder that will contain the selected files
+      # Creates a release/ folder that will contain only the "useful" files (exclude .github/, .vscode/, etc.)
       - name: Prepare Release folder
-        run: mkdir -p release
+        run: |
+          mkdir -p release/tmp
+          rsync -a ./ release/tmp/ \
+            --exclude ".git*" \
+            --exclude ".github" \
+            --exclude ".vscode" \
+            --exclude ".vsconfig"
 
-      # Create a ZIP archive with only the "useful" content for uses (so exclude /.github, /docs, ...)
+      # Create a ZIP archive with the content of the release/tmp folder
       - name: Pack to ZIP archive
         run: |
-          zip -r release/package.zip . \
-            -x "docs/*" \
-            -x ".github/*" \
-            -x ".vscode/*" \
-            -x ".vsconfig"
+          cd release/tmp
+          zip -r ../${{ steps.pkg.outputs.package_name }}.zip ./*
+          cd ../..
 
+      # Create a Tarball archive with the content of the release/tmp folder
       - name: Pack to tarball
         run: |
-          tar --exclude='./docs' \
-              --exclude='./github' \
-              --exclude='./vscode' \
-              --exclude='./vsconfig' \
-              --exclude-vcs \
-              -czf release/package.tar.gz .
+          tar -czf release/${{ steps.pkg.outputs.package_name }}.tar.gz -C release/tmp .
 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "${{ steps.pkg.outputs.package_name }}_${{github.ref_name}}"
+          name: "${{ steps.pkg.outputs.package_title }}_${{github.ref_name}}"
           tag_name: ${{ github.ref_name }}
           files: |
-            release/package.zip
-            release/package.tar.gz
+            release/${{ steps.pkg.outputs.package_name }}.zip
+            release/${{ steps.pkg.outputs.package_name }}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
