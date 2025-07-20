@@ -1,0 +1,16 @@
+{
+    "name": "SideXP.Unity.TPR.Editor",
+    "rootNamespace": "SideXP.TPR.EditorOnly",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

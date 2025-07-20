@@ -1,0 +1,14 @@
+{
+    "name": "SideXP.Unity.TPR",
+    "rootNamespace": "SideXP.TPR",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

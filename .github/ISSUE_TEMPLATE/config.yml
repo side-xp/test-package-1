@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the community guidelines
+    about: "Please make sure you have read the submission guidelines before posting an issue"
+    url: https://github.com/side-xp/test-package-releases/blob/main/CONTRIBUTING.md#-submitting-an-issue
+  - name: Want to start a discussion?
+    about: "Want to start a thread to discuss an idea? Use the discussions feature provided by GitHub."
+    url: https://github.com/side-xp/test-package-releases/discussions
+  - name: Contact us
+    url: mailto:dev@sideways-experiments.com
+    about: "Feel free to contact us if you need any help or want to know more about our work!"

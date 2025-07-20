@@ -1,0 +1,58 @@
+name: Create package's release on master push
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      # Makes the content of the repository accessible from a $GITHUB_WORKSPACE variable
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Read the name of the package from the package.json file, so the release will be named the same
+      - name: Read package name from package.json
+        id: pkg
+        run: |
+          NAME=$(jq -r .name package.json)
+          echo "package_name=$NAME" >> $GITHUB_OUTPUT
+
+      # Creates a release/ folder that will contain the selected files
+      - name: Prepare Release folder
+        run: mkdir -p release
+
+      # Create a ZIP archive with only the "useful" content for uses (so exclude /.github, /docs, ...)
+      - name: Pack to ZIP archive
+        run: |
+          zip -r release/package.zip . \
+            -x "docs/*" \
+            -x ".github/*" \
+            -x ".vscode/*" \
+            -x ".vsconfig"
+
+      - name: Pack to tarball:
+        run: |
+          tar --exclude='./docs' \
+              --exclude='./github' \
+              --exclude='./vscode' \
+              --exclude='./vsconfig' \
+              --exclude-vcs \
+              -czf release/package.tar.gz .
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "${{ steps.pkg.outputs.package_name }}_${{github.ref_name}}"
+          tag_name: ${{ github.ref_name }}
+          files: |
+            release/package.zip
+            release/package.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
