@@ -1,8 +1,10 @@
 {
-    "name": "SideXP.Unity.TPR",
-    "rootNamespace": "SideXP.TPR",
+    "name": "SideXP.Unity.TestPackage1.Editor",
+    "rootNamespace": "SideXP.TestPackage1.EditorOnly",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

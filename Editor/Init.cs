@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SideXP.TPR.EditorOnly
+namespace SideXP.TestPackage1.EditorOnly
 {
 
     /// <summary>

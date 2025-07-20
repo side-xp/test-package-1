@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SideXP.TPR
+namespace SideXP.TestPackage1
 {
 
     /// <summary>
