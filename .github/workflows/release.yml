@@ -1,9 +1,9 @@
-name: Create package's release on master push
+name: Create package's release on main push
 
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - 'v*.*.*'
 
