@@ -13,8 +13,10 @@ jobs:
     steps:
       - name: Echo x1
         run: |
+          echo ${{ github.base_ref }}
           echo ${{ github.ref }}
           echo ${{ github.ref_name }}
+          echo ${{ github.workflow_ref }}
 
   release:
     name: Create Release
