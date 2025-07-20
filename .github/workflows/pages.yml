@@ -27,6 +27,10 @@ jobs:
           rm -rf docs
           cp -r "Documentation~" "docs"
 
+      # Disable Jekyll features: the documentation will be uploaded as static files, and Pages won't look for _site or use SCSS
+      - name: Disable Jekyll
+        run: touch docs/.nojekyll
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
