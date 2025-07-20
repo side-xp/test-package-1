@@ -1,4 +1,4 @@
-name: Create package's release on main push
+name: Release package
 
 on:
   push:
@@ -9,6 +9,7 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    if: ${GITHUB_REF##*/} == 'main' || ${GITHUB_REF##*/} == 'master'
 
     steps:
       # Make the content of the repository accessible from a $GITHUB_WORKSPACE variable
