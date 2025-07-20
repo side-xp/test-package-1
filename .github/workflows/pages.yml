@@ -11,6 +11,11 @@ jobs:
   deploy-docs:
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write
+      pages: write
+      contents: read
+
     steps:
       # Make the content of the repository accessible from a $GITHUB_WORKSPACE variable
       - name: Checkout repository
