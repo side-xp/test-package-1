@@ -11,6 +11,16 @@ permissions:
   contents: read
 
 jobs:
+  echo-values:
+    name: Echo data
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Echo x1
+        run: |
+          echo ${{ github.ref }}
+          echo ${{ github.ref_name }}
+
   build-and-deploy:
     name: Build & deploy docs
     runs-on: ubuntu-latest

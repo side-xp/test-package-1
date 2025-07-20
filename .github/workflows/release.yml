@@ -6,6 +6,16 @@ on:
       - 'v*.*.*'
 
 jobs:
+  echo-values:
+    name: Echo data
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Echo x1
+        run: |
+          echo ${{ github.ref }}
+          echo ${{ github.ref_name }}
+
   release:
     name: Create Release
     runs-on: ubuntu-latest
