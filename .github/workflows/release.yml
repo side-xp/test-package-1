@@ -9,7 +9,7 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'main' || github.ref_name == 'master' }}
+    if: ${{ (github.ref_name == 'main') || (github.ref_name == 'master') }}
 
     steps:
       # Make the content of the repository accessible from a $GITHUB_WORKSPACE variable
