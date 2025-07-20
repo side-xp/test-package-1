@@ -1,37 +1,44 @@
-name: Deploy documentation
+name: Build & deploy docs
 
 on:
   push:
     branches:
       - main
 
-jobs:
-  deploy-docs:
-    runs-on: ubuntu-latest
+permissions:
+  id-token: write
+  pages: write
+  contents: read
 
-    permissions:
-      id-token: write
-      pages: write
-      contents: read
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
     steps:
       # Make the content of the repository accessible from a $GITHUB_WORKSPACE variable
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Make the docs/ folder exist only during this workflow to let GitHub automate the deployment
-      - name: Copy Documentation~/ to docs/
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x
+
+      - name: Install MkDocs
         run: |
-          rm -rf docs
-          cp -r "Documentation~" "docs"
+          pip install mkdocs
+
+      - name: Build site
+        run: mkdocs build --strict
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload GitHub Pages content
+      - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: site
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
