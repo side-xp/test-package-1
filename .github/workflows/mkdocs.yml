@@ -1,63 +1,65 @@
-# # This workflow takes the content of the Documentation~/ directory, and uses MkDocs to generate a static webstite from the MarkDown files.
-# # Once built, the website is then deployed to GitHub Pages.
-# # Make sure you have selected "GitHub Actions" mode in Settings > Pages.
-# # After running this workflow, the website should be accessible at https://[username].github.io/[repository-name]
-# name: Build & deploy docs
+# This workflow takes the content of the Documentation~/ directory, and uses MkDocs to generate a static webstite from the MarkDown files.
+# Once built, the website is then deployed to GitHub Pages.
+# Make sure you have selected "GitHub Actions" mode in Settings > Pages.
+# After running this workflow, the website should be accessible at https://[username].github.io/[repository-name]
+name: Build & deploy docs
 
-# # Trigger workflow only when a version tag is pushed.
-# # Note that the target branch is not checked, as it's assumed only the maintainers can push version tags.
-# on:
-#   push:
-#     tags:
-#       - 'v*.*.*'
+# Trigger workflow only when a version tag is pushed.
+# Note that the target branch is not checked, as it's assumed only the maintainers can push version tags.
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 
-# # Setup permissions for this workflow.
-# permissions:
-#   id-token: write
-#   pages: write
-#   contents: read
+# Setup permissions for this workflow.
+permissions:
+  id-token: write
+  pages: write
+  contents: read
 
-# jobs:
-#   build-and-deploy:
-#     name: Build & deploy docs
-#     runs-on: ubuntu-latest
+jobs:
+  build-and-deploy:
+    name: Build & deploy docs
+    runs-on: ubuntu-latest
 
-#     steps:
-#       # Checkout repository
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+    steps:
+      # Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       # Install Python for this workflow
-#       - name: Set up Python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: '3.x'
+      # Install Python for this workflow
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
-#       # Install MkDocs. If you want to use a specific theme, add it to this install command.
-#       # Example: pip install mkdocs mkdocs-bootswatch
-#       - name: Install MkDocs
-#         run: |
-#           pip install mkdocs
+      # Install MkDocs. If you want to use a specific theme, add it to this install command.
+      # Example: pip install mkdocs mkdocs-bootswatch
+      - name: Install MkDocs
+        run: |
+          pip install mkdocs
 
-#       # Build the website using mkdocs build command
-#       - name: Build website
-#         run: mkdocs build --strict
+      # Build the website using mkdocs build command
+      - name: Build website
+        run: |
+          cd "./Documentation~"
+          mkdocs build --strict
 
-#       # Configure GitHub Pages
-#       - name: Configure GitHub Pages
-#         uses: actions/configure-pages@v5
+      # Configure GitHub Pages
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
-#       # Upload the MkDocs build output (which by default is in a site/ folder)
-#       - name: Upload site artifact
-#         uses: actions/upload-pages-artifact@v3
-#         with:
-#           path: site
+      # Upload the MkDocs build output (which by default is in a site/ folder)
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
 
-#       # Deploy the website to GitHub Pages
-#       - name: Deploy to GitHub Pages
-#         uses: actions/deploy-pages@v4
+      # Deploy the website to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
 
-#       # Display output link
-#       - name: Feedback
-#         run: |
-#           echo "Documentation website successfully deployed at https://${{github.repository_owner}}.github.io/${{github.event.repository.name}}"
+      # Display output link
+      - name: Feedback
+        run: |
+          echo "Documentation website successfully deployed at https://${{github.repository_owner}}.github.io/${{github.event.repository.name}}"
