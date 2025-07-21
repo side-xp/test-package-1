@@ -1,4 +1,5 @@
 site_name: Test Package 1
+docs_dir: ./
 theme:
   name: readthedocs
   logo: ./img/logo.png

@@ -57,6 +57,7 @@ jobs:
         run: |
           mkdir -p release/docs
           cp -a "Documentation~" "release/docs"
+          ls "release/docs"
           rm "release/docs/mkdocs.yml"
 
       # Create a ZIP archive with the content of the release/package/ folder

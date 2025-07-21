@@ -1,6 +1,6 @@
 {
   "name": "com.side-xp.test-package-1",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "This project exists for test purposes, and used to experiment with GitHub features to organize docs and automate package releases.",
   "displayName": "SideXP - Test Package 1",
   "unity": "2021.3",
