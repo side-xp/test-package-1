@@ -49,6 +49,7 @@ jobs:
             --exclude ".git*" \
             --exclude ".github" \
             --exclude ".vscode" \
+            --exclude "../release/package" \
             --exclude ".vsconfig"
 
       # Create a separate release/docs/ folder that will contain the content of the Documentation~/ folder
