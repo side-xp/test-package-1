@@ -48,7 +48,9 @@ jobs:
 
       # Build the website using mkdocs build command
       - name: Build website
-        run: mkdocs build --strict
+        run: |
+          cd docs
+          mkdocs build --strict
 
       # Configure GitHub Pages
       - name: Configure GitHub Pages
