@@ -67,7 +67,7 @@ jobs:
           PKG_ZIP_PATH=${{ steps.pkg.outputs.package_name }}.zip
           echo "path=$PKG_ZIP_PATH" >> $GITHUB_OUTPUT
           cd release/package
-          zip -r -q ../$PKG_ZIP_PATH ./* -x "release"
+          zip -r -q ../$PKG_ZIP_PATH ./* -x "release" "../release" "../../release"
           cd ../..
 
       # Create a Tarball archive with the content of the release/package/ folder
