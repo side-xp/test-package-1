@@ -33,7 +33,17 @@ jobs:
         run: |
           mkdir -p docs
           cp -a "Documentation~" "docs"
+          echo "DISPLAY DOCS CONTENT"
+          ls docs
+          echo "DISPLAY DOCS/DOCUMENTATION CONTENT"
+          ls docs/Documentation~
+          echo "END"
           mv "docs/Documentation~/mkdocs.yml" "docs"
+          echo "AFTER MOVE: DISPLAY DOCS CONTENT"
+          ls docs
+          echo "AFTER MOVE: DISPLAY DOCS/DOCUMENTATION CONTENT"
+          ls docs/Documentation~
+          echo "END"
 
       # Install Python for this workflow
       - name: Set up Python
@@ -48,7 +58,7 @@ jobs:
 
       # Build the website using mkdocs build command
       - name: Build website
-        run: mkdocs build --strict
+        run: mkdocs build --strict -c "docs/mkdocs.yml"
 
       # Configure GitHub Pages
       - name: Configure GitHub Pages
