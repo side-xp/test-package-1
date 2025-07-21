@@ -90,21 +90,11 @@ jobs:
           zip -r ../$DOCS_PATH ./*
           cd ../..
 
-      - name: Echo infos
-        run: |
-          echo "${{ steps.pkg_zip.outputs.path }}"
-          echo "$PKG_ZIP_PATH"
-          echo "${{ steps.pkg_targz.outputs.path }}"
-          echo "$PKG_TARGZ_PATH"
-          echo "${{ steps.docs_zip.outputs.path }}"
-          echo "$DOCS_PATH"
-          ls release
-
       # Create a GitHub Release entry 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "${{ steps.pkg.outputs.package_title }} (${{github.ref_name}})"
+          name: "${{github.ref_name}}"
           tag_name: ${{ github.ref_name }}
           files: |
             release/${{ steps.pkg_zip.outputs.path }}
