@@ -49,7 +49,6 @@ jobs:
             --exclude ".git*" \
             --exclude ".github" \
             --exclude ".vscode" \
-            --exclude "./release" \
             --exclude ".vsconfig"
 
       # Create a separate release/docs/ folder that will contain the content of the Documentation~/ folder
@@ -68,7 +67,7 @@ jobs:
           PKG_ZIP_PATH=${{ steps.pkg.outputs.package_name }}.zip
           echo "path=$PKG_ZIP_PATH" >> $GITHUB_OUTPUT
           cd release/package
-          zip -r -q ../$PKG_ZIP_PATH ./*
+          zip -r -q ../$PKG_ZIP_PATH ./* -x "release"
           cd ../..
 
       # Create a Tarball archive with the content of the release/package/ folder
