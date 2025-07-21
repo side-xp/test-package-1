@@ -27,6 +27,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Create a separate release/docs/ folder that will contain the content of the Documentation~/ folder
+      # This is used to extract the mkdocs.yml file, since MkDocs doesn't allow it to be part of the root directory
+      - name: Prepare docs folder
+        run: |
+          mkdir -p docs
+          cp -a "Documentation~" "docs"
+          mv "docs/Documentation~/mkdocs.yml" "docs"
+
       # Install Python for this workflow
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,14 +44,11 @@ jobs:
       # Install MkDocs. If you want to use a specific theme, add it to this install command.
       # Example: pip install mkdocs mkdocs-bootswatch
       - name: Install MkDocs
-        run: |
-          pip install mkdocs
+        run: pip install mkdocs
 
       # Build the website using mkdocs build command
       - name: Build website
-        run: |
-          cd "./Documentation~"
-          mkdocs build --strict
+        run: mkdocs build --strict
 
       # Configure GitHub Pages
       - name: Configure GitHub Pages
