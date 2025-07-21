@@ -14,8 +14,10 @@ name: Release package
 # Note that the target branch is not checked, as it's assumed only the maintainers can push version tags.
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
+    # tags:
+    #   - 'v*.*.*'
 
 jobs:
   release:
@@ -84,14 +86,21 @@ jobs:
           zip -r ../$DOCS_PATH ./*
           cd ../..
 
+      - name: Echo infos
+        run: |
+          echo $PKG_ZIP_PATH
+          echo $PKG_TARGZ_PATH
+          echo $DOCS_PATH
+          ls ./release
+
       # Create a GitHub Release entry 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "${{ steps.pkg.outputs.package_title }}_${{github.ref_name}}"
+          name: "${{ steps.pkg.outputs.package_title }} (${{github.ref_name}})"
           tag_name: ${{ github.ref_name }}
           files: |
-            release/PKG_ZIP_PATH
+            release/$PKG_ZIP_PATH
             release/$PKG_TARGZ_PATH
             release/$DOCS_PATH
         env:
