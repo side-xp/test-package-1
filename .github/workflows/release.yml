@@ -45,10 +45,12 @@ jobs:
       - name: Prepare package folder
         run: |
           mkdir -p release/package
-          rsync -a ./ release/package/ \
+          rsync --prune-empty-dirs -a ./ release/package/ \
             --exclude ".git*" \
             --exclude ".github" \
             --exclude ".vscode" \
+            --exclude ".editorconfig" \
+            --exclude ".gitignore" \
             --exclude ".vsconfig"
 
       # Create a separate release/docs/ folder that will contain the content of the Documentation~/ folder
