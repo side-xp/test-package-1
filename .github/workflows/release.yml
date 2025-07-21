@@ -88,10 +88,10 @@ jobs:
 
       - name: Echo infos
         run: |
-          echo $PKG_ZIP_PATH
-          echo $PKG_TARGZ_PATH
-          echo $DOCS_PATH
-          ls ./release
+          echo "$PKG_ZIP_PATH"
+          echo "$PKG_TARGZ_PATH"
+          echo "$DOCS_PATH"
+          ls
 
       # Create a GitHub Release entry 
       - name: Upload Release
@@ -100,8 +100,8 @@ jobs:
           name: "${{ steps.pkg.outputs.package_title }} (${{github.ref_name}})"
           tag_name: ${{ github.ref_name }}
           files: |
-            release/$PKG_ZIP_PATH
-            release/$PKG_TARGZ_PATH
-            release/$DOCS_PATH
+            "release/$PKG_ZIP_PATH"
+            "release/$PKG_TARGZ_PATH"
+            "release/$DOCS_PATH"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
