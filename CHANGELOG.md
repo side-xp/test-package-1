@@ -14,7 +14,3 @@ All notable changes to this project will be documented in this file. See [standa
 
 * A 34b4283
 * **ci:** trigger workflows on push to main ca47bb8
-
-# Change Log
-
-@todo
