@@ -1,6 +1,13 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [0.4.2](///compare/v0.4.1...v0.4.2) (2025-07-26)
+
+
+### Bug Fixes
+
+* **ci:** change Release outputs names 9176078
 
 ### [0.4.1](///compare/v0.4.0...v0.4.1) (2025-07-24)
 

@@ -1,16 +1,9 @@
-# NOTE: If you want to copy this workflow for your own Unity package repository, take care of some points that are related to Sideways
-# Experiments in this script:
-# - In the "Read package.json" step, a CLEAN_DISPLAY_NAME variable is created. In this line, we use a Regex to remove the "SideXP - "
-# prefix we usually set in the "displayName" property of the package.json file, and the "com.side-xp" prefix used in the "name" property.
-# - In the "Prepare package folder" step, we exclude the files and folders from this repository that are not related to the package to
-# release (eg. GitHub workflows, VSCode config, ...). If you have other files and folders to exclude, add --exclude commands to the list.
-
 # This workflow will create a GitHub Release with only the "useful" files inside it. Any file that is not required for the package (eg.
 # workflows from the .github/ folder) will be excluded.
 # Also, this workflow will output a ZIP and a Tarball achives in the Release entry, plus the documentation in a separate folder.
 name: Release package
 
-# Trigger workflow whenever something is pushed on main, assuming only final versions are pushed to that branch
+# Trigger workflow whenever something is pushed on main, assuming only final versions are pushed to that branch.
 on:
   push:
     branches:
@@ -30,17 +23,15 @@ jobs:
 
       # Read the content of the package.json file:
       # - Extract the "name" property, which will also be used for archive files name
-      # - Extract the "displayName" property if it exists
-      # - Remove the "SideXP - " or "com.side-xp" prefix, to get the "clean" name, used for the name of the release
+      # - Extract the "version" property if it exists
       - name: Read package.json
         id: pkg
         run: |
           PKG_PATH="package.json"
           NAME=$(jq -r .name "$PKG_PATH")
-          DISPLAY_NAME=$(jq -r '.displayName // .name' "$PKG_PATH")
-          CLEAN_DISPLAY_NAME=$(echo "$DISPLAY_NAME" | sed -E 's/^Side XP - //; s/^com\.side-xp\.//')
+          VERSION=$(jq -r .version "$PKG_PATH")
           echo "package_name=$NAME" >> $GITHUB_OUTPUT
-          echo "package_title=$CLEAN_DISPLAY_NAME" >> $GITHUB_OUTPUT
+          echo "package_version=$VERSION" >> $GITHUB_OUTPUT
 
       # Create a release/package/ folder that will contain only the "useful" files (exclude .github/, .vscode/, etc.)
       - name: Prepare package folder
@@ -63,7 +54,7 @@ jobs:
           rm "release/docs/Documentation~/mkdocs.yml"
 
       # Create a ZIP archive with the content of the release/package/ folder
-      # That archive file is named com.side-xp.[package-name].zip
+      # That archive file is named [package-name].zip
       - name: Output package as ZIP archive
         id: pkg_zip
         run: |
@@ -74,7 +65,7 @@ jobs:
           cd ../..
 
       # Create a Tarball archive with the content of the release/package/ folder
-      # That archive file is named com.side-xp.[package-name].tar.gz
+      # That archive file is named [package-name].tar.gz
       - name: Output package as tarball
         id: pkg_targz
         run: |
@@ -89,7 +80,7 @@ jobs:
       - name: Output docs as ZIP archive
         id: docs_zip
         run: |
-          DOCS_PATH="Documentation_${{github.ref_name}}.zip"
+          DOCS_PATH="Documentation_v${{steps.pkg.outputs.package_version}}.zip"
           echo "path=$DOCS_PATH" >> $GITHUB_OUTPUT
           cd release/docs
           zip -r -q ../$DOCS_PATH ./*
@@ -99,8 +90,8 @@ jobs:
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "${{github.ref_name}}"
-          tag_name: ${{ github.ref_name }}
+          name: "v${{steps.pkg.outputs.package_version}}"
+          tag_name: "v${{steps.pkg.outputs.package_version}}"
           files: |
             release/${{ steps.pkg_zip.outputs.path }}
             release/${{ steps.pkg_targz.outputs.path }}
